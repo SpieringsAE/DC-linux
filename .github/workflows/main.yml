@@ -34,6 +34,8 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
-          who
-          touch test-log
-          echo "22424324" > test-log
+          sudo docker ps 
+          pwd
+          sudo docker run --rm --name build-linux --privileged=true -v /home/gitlab-runner/actions-runner/_work/DC-linux/DC-linux:/home  main-linux:v1 /bin/bash -c "export ARCH=riscv && export CROSS_COMPILE=/usr/bin/riscv64-linux-gnu- && make -j$(nproc) && make modules_install"
+          
+          
