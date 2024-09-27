@@ -36,6 +36,6 @@ jobs:
           echo test, and deploy your project.
           sudo docker ps 
           pwd
-          sudo docker run --rm --name build-linux --privileged=true -v /home/gitlab-runner/actions-runner/_work/DC-linux/DC-linux:/home  main-linux:v1 /bin/bash -c "cd /home && export ARCH=riscv && export CROSS_COMPILE=/usr/bin/riscv64-linux-gnu- && make -j$(nproc) && make modules_install"
+          sudo docker run --rm --name build-linux --privileged=true -v /home/gitlab-runner/actions-runner/_work/DC-linux/DC-linux:/home  main-linux:v1 /bin/bash -c "cd /home && export ARCH=riscv && export CROSS_COMPILE=/usr/bin/riscv64-linux-gnu- && make defconfig && make -j$(nproc) && make modules_install"
           
           
