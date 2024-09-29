@@ -41,4 +41,12 @@ jobs:
         run: |
           echo $mail
           echo "CI build code failure ! $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/$JOB_ID" | mail -s "build code" $mail
-          
+        
+      - name: upload
+        run: |
+          cd /home/gitlab-runner/actions-runner/_work/DC-linux/DC-linux/lib 
+          zip -r module.zip  module
+          curl -uadmin:${{ADMIN_PASS}} -T  module.zip ${{JFROG_PATH}}/module.zip
+          cd /home/gitlab-runner/actions-runner/_work/DC-linux/DC-linux/arch/riscv
+          zip -r boot.zip boot
+          curl -uadmin:${{ADMIN_PASS}} -T  boot.zip ${{JFROG_PATH}}/boot.zip
