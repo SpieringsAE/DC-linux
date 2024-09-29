@@ -39,6 +39,6 @@ jobs:
         env: 
              mail: ${{ secrets.SEND_MAIL }}
         run: |
-          echo $email
-          echo "CI build code failure ! $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/$JOB_ID" | mail -s "build code" $email
+          echo $mail
+          echo "CI build code failure ! $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/$JOB_ID" | mail -s "build code" $mail
           
