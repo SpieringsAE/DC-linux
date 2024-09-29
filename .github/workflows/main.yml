@@ -24,20 +24,20 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
       # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: build-linux
+        id: build-linux
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
           sudo docker ps 
           pwd
           sudo docker run --rm --name build-linux --privileged=true -v /home/gitlab-runner/actions-runner/_work/DC-linux/DC-linux:/home  main-linux:v1 /bin/bash -c "cd /home && export ARCH=riscv && export CROSS_COMPILE=/usr/bin/riscv64-linux-gnu- && make defconfig && make -j$(nproc) && make modules_install"
-          echo "CI update code success !  github.com/DC-DeepComputing/DC-linux/actions" | mail -s "update code" sixue.cheng@deepcomputing.io
           sudo chown -R gitlab-runner:gitlab-runner /home/gitlab-runner/actions-runner/_work/DC-linux/DC-linux  
           sudo chmod -R 755 /home/gitlab-runner/actions-runner/_work/DC-linux/DC-linux
+      - name: send-mail
+        if: ${{ failure() && steps.build-linux.conclusion == 'failure' }}
+        env: 
+            email: "sixue.cheng@deepcomputing.io"
+        run: |
+          echo $email
+          echo "CI build code failure ! https://github.com/DC-DeepComputing/test-action/actions" | mail -s "build code" $email
           
