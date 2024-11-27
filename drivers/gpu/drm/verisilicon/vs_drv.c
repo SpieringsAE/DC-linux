@@ -8,12 +8,12 @@
 #include <linux/pm_runtime.h>
 #include <linux/of_device.h>
 
-#include <linux/aperture.h>
+#include <drm/drm_aperture.h>
 #include <drm/drm_atomic_helper.h>
 #include <drm/drm_crtc.h>
 #include <drm/drm_crtc_helper.h>
 #include <drm/drm_fb_helper.h>
-#include <drm/drm_client_setup.h>
+#include <drm/drm_fbdev_dma.h>
 
 #include <drm/drm_file.h>
 #include <drm/drm_gem_dma_helper.h>
@@ -544,7 +544,7 @@ static int vs_drm_bind(struct device *dev)
 	vs_mode_config_init(drm_dev);
 
 	/* Remove existing drivers that may own the framebuffer memory. */
-	ret = aperture_remove_all_conflicting_devices(vs_drm_driver.name);
+	ret = drm_aperture_remove_framebuffers(&vs_drm_driver);
 	if (ret)
 		return ret;
 
@@ -578,7 +578,7 @@ static int vs_drm_bind(struct device *dev)
 	if (ret)
 		goto err_unbind_all;
 
-	drm_client_setup(drm_dev, NULL);
+	drm_fbdev_dma_setup(drm_dev, 0);
 
 	return 0;
 
