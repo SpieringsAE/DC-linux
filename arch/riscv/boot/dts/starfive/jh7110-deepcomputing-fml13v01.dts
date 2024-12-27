@@ -79,6 +79,11 @@
 	status = "okay";
 };
 
+&mmc0 {
+	max-frequency = <200000000>;
+	assigned-clock-rates = <150000000>;
+};
+
 &pcie1 {
 	perst-gpios = <&sysgpio 21 GPIO_ACTIVE_LOW>;
 	phys = <&pciephy1>;
